@@ -15,36 +15,36 @@ class TableConfig extends AbstractConfig
     {
 
         $this->table = new Table(1024);
-        $this->table->column('data',Table::TYPE_STRING,1024);
+        $this->table->column('data', Table::TYPE_STRING, 1024);
         $this->table->create();
         parent::__construct($runMode);
     }
 
     function getConf($key = null)
     {
-        if($key == null){
+        if ($key == null) {
             $data = [];
-            foreach ($this->table as $key => $item){
+            foreach ($this->table as $key => $item) {
                 $data[$key] = unserialize($item['data']);
             }
             return $data;
         }
-        if(strpos($key,".") > 0){
-            $temp = explode(".",$key);
+        if (strpos($key, ".") > 0) {
+            $temp = explode(".", $key);
             $data = $this->table->get(array_shift($temp));
-            if($data){
+            if ($data) {
                 $data = unserialize($data['data']);
                 /*
                  * 数组才有意义进行二次搜索
                  */
-                if(is_array($data)){
+                if (is_array($data)) {
                     $data = new SplArray($data);
-                    return $data->get(implode('.',$temp));
+                    return $data->get(implode('.', $temp));
                 }
             }
-        }else{
+        } else {
             $data = $this->table->get($key);
-            if($data){
+            if ($data) {
                 return unserialize($data['data']);
             }
         }
@@ -53,22 +53,22 @@ class TableConfig extends AbstractConfig
 
     function setConf($key, $val): bool
     {
-        if(strpos($key,".") > 0){
-            $temp = explode(".",$key);
+        if (strpos($key, ".") > 0) {
+            $temp = explode(".", $key);
             $key = array_shift($temp);
             $data = $this->getConf($key);
-            if(is_array($data)){
+            if (is_array($data)) {
                 $data = new SplArray($data);
-            }else{
+            } else {
                 $data = new SplArray();
             }
-            $data->set(implode('.',$temp),$val);
-            return $this->table->set($key,[
-                'data'=>serialize($data->getArrayCopy())
+            $data->set(implode('.', $temp), $val);
+            return $this->table->set($key, [
+                'data' => serialize($data->getArrayCopy())
             ]);
-        }else{
-            return $this->table->set($key,[
-                'data'=>serialize($val)
+        } else {
+            return $this->table->set($key, [
+                'data' => serialize($val)
             ]);
         }
     }
@@ -76,27 +76,29 @@ class TableConfig extends AbstractConfig
     function load(array $array): bool
     {
         $this->clear();
-        foreach ($array as $key => $value){
-            $this->setConf($key,$value);
+        foreach ($array as $key => $value) {
+            $this->setConf($key, $value);
         }
         return true;
     }
 
     function merge(array $array): bool
     {
-        foreach ($array as $key => $value){
+        foreach ($array as $key => $value) {
             $data = $this->getConf($key);
-            if(is_array($data)){
+            if (is_array($data)) {
                 $data = $value + $data;
+            } else {
+                $data = $value;
             }
-            $this->setConf($key,$data);
+            $this->setConf($key, $data);
         }
         return true;
     }
 
     function clear(): bool
     {
-        foreach ($this->table as $key => $item){
+        foreach ($this->table as $key => $item) {
             $this->table->del($key);
         }
         return true;
