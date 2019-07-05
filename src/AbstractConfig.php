@@ -6,22 +6,16 @@ namespace EasySwoole\Config;
 
 abstract class AbstractConfig
 {
-    const RUN_MODE_DEV = 'dev';
-    const RUN_MODE_PRODUCE = 'produce';
+    private $isDev;
 
-    private $runMode;
-
-    function __construct(string $runMode)
+    function __construct(bool $isDev = true)
     {
-        $this->runMode = $runMode;
+        $this->isDev = $isDev;
     }
 
-    public function runMode(string $runMode = null)
+    protected function isDev():bool
     {
-        if($runMode !== null){
-            $this->runMode = $runMode;
-        }
-        return $this->runMode;
+        return $this->isDev;
     }
 
     abstract function getConf($key = null);

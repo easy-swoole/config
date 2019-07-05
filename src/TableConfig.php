@@ -11,13 +11,13 @@ class TableConfig extends AbstractConfig
 {
     private $table;
 
-    function __construct(string $runMode)
+    function __construct(bool $isDev = true)
     {
 
         $this->table = new Table(1024);
         $this->table->column('data', Table::TYPE_STRING, 1024);
         $this->table->create();
-        parent::__construct($runMode);
+        parent::__construct($isDev);
     }
 
     function getConf($key = null)

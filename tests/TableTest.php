@@ -13,7 +13,7 @@ class TableTest extends TestCase
 
     public function setUp()/* The :void return type declaration that should be here would cause a BC issue */
     {
-        $this->config = new \EasySwoole\Config\TableConfig('produce');
+        $this->config = new \EasySwoole\Config\TableConfig();
     }
 
     private function getConfigObj(): TableConfig

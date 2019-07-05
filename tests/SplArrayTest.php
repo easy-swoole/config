@@ -14,7 +14,7 @@ class SplArrayTest extends TestCase
 
     public function setUp()/* The :void return type declaration that should be here would cause a BC issue */
     {
-        $this->config = new \EasySwoole\Config\SplArrayConfig('dev');
+        $this->config = new \EasySwoole\Config\SplArrayConfig();
     }
 
     private function getConfigObj(): SplArrayConfig
