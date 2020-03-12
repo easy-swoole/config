@@ -50,6 +50,11 @@ class TableConfig extends AbstractConfig
         return null;
     }
 
+    function del(string $key)
+    {
+        return $this->table->del($key);
+    }
+
     function setConf($key, $val): bool
     {
         if (strpos($key, ".") > 0) {
