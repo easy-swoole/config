@@ -11,7 +11,7 @@ class TableConfig extends AbstractConfig
 {
     private $table;
 
-    function __construct(int $size = 1024,int $dataSize = 2048)
+    function __construct(int $size = 1024,int $dataSize = 4096)
     {
 
         $this->table = new Table($size);
