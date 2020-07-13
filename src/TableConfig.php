@@ -27,27 +27,20 @@ class TableConfig extends AbstractConfig
                 $data[$key] = unserialize($item['data']);
             }
             return $data;
-        }
-        if (strpos($key, ".") > 0) {
+        }else{
             $temp = explode(".", $key);
             $data = $this->table->get(array_shift($temp));
-            if ($data) {
-                $data = unserialize($data['data']);
-                /*
-                 * 数组才有意义进行二次搜索
-                 */
-                if (is_array($data)) {
-                    $data = new SplArray($data);
-                    return $data->get(implode('.', $temp));
-                }
+            if(!$data){
+                return null;
             }
-        } else {
-            $data = $this->table->get($key);
-            if ($data) {
-                return unserialize($data['data']);
+            $data = unserialize($data['data']);
+            if(!empty($temp) && is_array($data)){
+                $data = new SplArray($data);
+                return $data->get(implode('.', $temp));
+            }else{
+                return $data;
             }
         }
-        return null;
     }
 
     function setConf($key, $val): bool
@@ -97,7 +90,11 @@ class TableConfig extends AbstractConfig
 
     function clear(): bool
     {
+        $keys = [];
         foreach ($this->table as $key => $item) {
+            $keys[] = $key;
+        }
+        foreach ($keys as $key){
             $this->table->del($key);
         }
         return true;
